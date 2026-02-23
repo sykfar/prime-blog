@@ -2,7 +2,7 @@
 
 A clean, modern WordPress blog theme featuring DM Sans typography, configurable category colours, responsive post card grid, and dark/light mode support.
 
-**Version:** 1.0.3 | **License:** GPL v2 or later | **Requires WordPress:** 6.0+ | **Requires PHP:** 8.0+
+**Version:** 1.0.4 | **License:** GPL v2 or later | **Requires WordPress:** 6.0+ | **Requires PHP:** 8.0+
 
 ---
 
@@ -40,7 +40,7 @@ A clean, modern WordPress blog theme featuring DM Sans typography, configurable 
 | Colors – Dark | Same set for dark mode |
 | Category Colors | One colour picker per category (auto-discovered) |
 | Typography | Font family (7 options), base font size |
-| Layout | Grid columns (2 or 3), content width |
+| Layout | Grid columns desktop (2 or 3), tablet (1 or 2), content width |
 | Share Buttons | Master toggle + per-network enable/disable |
 
 ---
@@ -71,6 +71,12 @@ prime-blog/
 ---
 
 ## Changelog
+
+### 1.0.4
+- Fix: Customizer grid CSS now wrapped in `@media (min-width: 1025px)` — no longer breaks responsive layout on mobile/tablet
+- Feature: new **"Posts per row – Tablet"** Customizer control (1 or 2 columns, 601–1024 px)
+- Fix: Customizer live preview now uses `<style>` injection with proper media queries instead of `element.style` (which bypassed all breakpoints)
+- Mobile (≤ 600 px) always shows 1 column regardless of any setting
 
 ### 1.0.3
 - Accessibility: touch targets increased to 44×44px (WCAG 2.5.5) for dark-mode toggle, hamburger, pagination, and social icons

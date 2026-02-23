@@ -258,12 +258,41 @@
 
     // ── Layout ──────────────────────────────────────────────────────────────
 
+    // Maintain separate state for desktop/tablet cols so both handlers
+    // can write into a single <style> element with correct media queries.
+    // This prevents the previous bug where element.style (inline, highest
+    // priority) overrode all responsive breakpoints on every screen size.
+    let liveDesktopCols = 3;
+    let liveTabletCols  = 2;
+
+    function rebuildGridStyle() {
+        let el = document.getElementById('prime-blog-customizer-grid');
+        if (!el) {
+            el = document.createElement('style');
+            el.id = 'prime-blog-customizer-grid';
+            document.head.appendChild(el);
+        }
+        el.textContent =
+            '@media (min-width: 1025px){' +
+                '.posts-grid{grid-template-columns:repeat(' + liveDesktopCols + ',1fr);}' +
+            '}' +
+            '@media (max-width:1024px) and (min-width:601px){' +
+                '.posts-grid{grid-template-columns:repeat(' + liveTabletCols + ',1fr);}' +
+            '}';
+        // Mobile (≤ 600 px) keeps its 1-column rule from main.css untouched.
+    }
+
     customize('prime_grid_cols', function (value) {
         value.bind(function (v) {
-            const cols = v === '2' ? 2 : 3;
-            document.querySelectorAll('.posts-grid').forEach(function (grid) {
-                grid.style.gridTemplateColumns = 'repeat(' + cols + ', 1fr)';
-            });
+            liveDesktopCols = v === '2' ? 2 : 3;
+            rebuildGridStyle();
+        });
+    });
+
+    customize('prime_grid_cols_tablet', function (value) {
+        value.bind(function (v) {
+            liveTabletCols = v === '1' ? 1 : 2;
+            rebuildGridStyle();
         });
     });
 

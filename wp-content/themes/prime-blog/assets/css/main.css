@@ -1424,7 +1424,7 @@ button.share-btn {
    20. Responsive
    --------------------------------------------------------------------------- */
 @media (max-width: 1024px) {
-  .posts-grid { grid-template-columns: repeat(2, 1fr); }
+  /* .posts-grid columns on tablet are controlled by the Customizer (prime_grid_cols_tablet) */
   .footer-widgets { grid-template-columns: 1fr 1fr; }
   .content-with-sidebar { grid-template-columns: 1fr; }
   .sidebar { position: static; }
