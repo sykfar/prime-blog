@@ -1,0 +1,45 @@
+# WordPress core (not tracked – install separately)
+/wp-admin/
+/wp-includes/
+/wp-*.php
+/xmlrpc.php
+/index.php
+/license.txt
+/readme.html
+
+# WordPress config (contains DB credentials)
+/wp-config.php
+/wp-config-sample.php
+
+# Uploads & generated files
+/wp-content/uploads/
+/wp-content/upgrade/
+/wp-content/backup-db/
+/wp-content/advanced-cache.php
+/wp-content/wp-cache-config.php
+/wp-content/cache/
+
+# All plugins (not part of this repo)
+/wp-content/plugins/
+
+# All themes EXCEPT prime-blog
+/wp-content/themes/[^p]*/
+/wp-content/themes/p[^r]*/
+/wp-content/themes/prime-blog.zip
+
+# ZIP at root
+/prime-blog.zip
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Node (if ever used for build tools)
+node_modules/
+npm-debug.log
