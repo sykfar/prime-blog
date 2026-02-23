@@ -5,7 +5,12 @@
   <!-- Featured image hero -->
   <?php if ( has_post_thumbnail() ) : ?>
     <div class="single-hero">
-      <?php the_post_thumbnail( 'prime-hero', [ 'alt' => get_the_title() ] ); ?>
+      <?php the_post_thumbnail( 'prime-hero', [
+        'alt'           => get_the_title(),
+        'fetchpriority' => 'high',
+        'loading'       => 'eager',
+        'decoding'      => 'async',
+      ] ); ?>
     </div>
   <?php endif; ?>
 

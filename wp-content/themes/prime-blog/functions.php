@@ -153,6 +153,19 @@ function prime_blog_get_font_options(): array {
  * Default category colour palette
  * Colours cycle when there are more categories than palette entries.
  * --------------------------------------------------------------------- */
+/**
+ * Fetch all categories with a static in-memory cache.
+ * Prevents identical DB queries across customize_register, customizer_css,
+ * and customize_preview_js within the same request.
+ */
+function prime_blog_get_all_categories(): array {
+    static $cache = null;
+    if ( null === $cache ) {
+        $cache = get_categories( [ 'hide_empty' => false, 'orderby' => 'name', 'order' => 'ASC' ] );
+    }
+    return $cache;
+}
+
 function prime_blog_default_cat_colors(): array {
     return [
         '#0284c7', // sky
@@ -214,14 +227,6 @@ function prime_blog_scripts() {
         PRIME_BLOG_VERSION
     );
 
-    // Extra styles (lazy fade, copy-code button)
-    wp_enqueue_style(
-        'prime-blog-extra',
-        PRIME_BLOG_URI . '/assets/css/extra.css',
-        [ 'prime-blog-style' ],
-        PRIME_BLOG_VERSION
-    );
-
     // Main JS (defer)
     wp_enqueue_script(
         'prime-blog-main',
@@ -237,6 +242,20 @@ function prime_blog_scripts() {
     }
 }
 add_action( 'wp_enqueue_scripts', 'prime_blog_scripts' );
+
+/**
+ * Load Google Fonts asynchronously so it never blocks rendering.
+ * Uses the preload-then-apply trick: rel="preload" fires immediately,
+ * onload swaps it to rel="stylesheet" once the font file has loaded.
+ */
+function prime_blog_nonblocking_fonts( string $html, string $handle ): string {
+    if ( 'prime-blog-fonts' !== $handle ) {
+        return $html;
+    }
+    $preload = str_replace( "rel='stylesheet'", "rel='preload' as='style' onload=\"this.onload=null;this.rel='stylesheet'\"", $html );
+    return $preload . '<noscript>' . $html . '</noscript>';
+}
+add_filter( 'style_loader_tag', 'prime_blog_nonblocking_fonts', 10, 2 );
 
 /* -----------------------------------------------------------------------
  * Widget areas
@@ -527,7 +546,7 @@ function prime_blog_customize_register( WP_Customize_Manager $wp_customize ): vo
     ] );
 
     $palette    = prime_blog_default_cat_colors();
-    $categories = get_categories( [ 'hide_empty' => false, 'orderby' => 'name', 'order' => 'ASC' ] );
+    $categories = prime_blog_get_all_categories();
 
     foreach ( $categories as $i => $cat ) {
         $setting_id = 'prime_cat_color_' . $cat->slug;
@@ -707,6 +726,21 @@ add_action( 'customize_register', 'prime_blog_customize_register' );
  *    These override the defaults in main.css without touching the file.
  * --------------------------------------------------------------------- */
 function prime_blog_customizer_css(): void {
+    // Cache the generated CSS in a transient so it isn't recomputed on every
+    // page load. Skip the cache inside the Customizer preview iframe so changes
+    // are reflected immediately without needing to save first.
+    $cache_key = 'prime_blog_css_' . PRIME_BLOG_VERSION;
+    $use_cache = ! is_customize_preview();
+
+    if ( $use_cache ) {
+        $cached = get_transient( $cache_key );
+        if ( false !== $cached ) {
+            echo $cached; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+            return;
+        }
+        ob_start();
+    }
+
     $fonts = prime_blog_get_font_options();
 
     // ── Retrieve all mod values (falls back to default when untouched) ──────
@@ -749,7 +783,7 @@ function prime_blog_customizer_css(): void {
 
     // ── Category colors – dynamic: reads every category in the site ─────────
     $palette    = prime_blog_default_cat_colors();
-    $categories = get_categories( [ 'hide_empty' => false, 'orderby' => 'name', 'order' => 'ASC' ] );
+    $categories = prime_blog_get_all_categories();
     $cat_colors = [];
     foreach ( $categories as $i => $cat ) {
         $default               = $palette[ $i % count( $palette ) ];
@@ -815,8 +849,18 @@ function prime_blog_customizer_css(): void {
     <?php endforeach; ?>
     </style>
     <?php
+    if ( $use_cache ) {
+        $generated = ob_get_clean();
+        set_transient( $cache_key, $generated, WEEK_IN_SECONDS );
+        echo $generated; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+    }
 }
 add_action( 'wp_head', 'prime_blog_customizer_css', 99 );
+
+// Bust the CSS transient whenever the user saves Customizer settings.
+add_action( 'customize_save_after', function () {
+    delete_transient( 'prime_blog_css_' . PRIME_BLOG_VERSION );
+} );
 
 /* -----------------------------------------------------------------------
  * 3. Enqueue Customizer live-preview script (only inside the Customizer)
@@ -832,7 +876,7 @@ function prime_blog_customize_preview_js(): void {
 
     // Pass font data and all category slugs to JS
     $palette    = prime_blog_default_cat_colors();
-    $categories = get_categories( [ 'hide_empty' => false, 'orderby' => 'name', 'order' => 'ASC' ] );
+    $categories = prime_blog_get_all_categories();
     $cat_js     = [];
     foreach ( $categories as $i => $cat ) {
         $cat_js[] = [
