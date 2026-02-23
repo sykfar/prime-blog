@@ -330,8 +330,8 @@ hr {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 38px;
-  height: 38px;
+  width: 44px;
+  height: 44px;
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
   background: transparent;
@@ -829,6 +829,8 @@ hr {
   font-size: 1.0625rem;
   line-height: 1.85;
   color: var(--text-muted);
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 
 .entry-content > * + * { margin-top: 1.5rem; }
@@ -1029,8 +1031,8 @@ button.share-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 40px;
-  height: 40px;
+  min-width: 44px;
+  height: 44px;
   padding: 0 .75rem;
   border-radius: var(--radius-sm);
   font-size: .9375rem;
@@ -1124,8 +1126,8 @@ button.share-btn {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 36px;
-  height: 36px;
+  width: 40px;
+  height: 40px;
   border-radius: var(--radius-sm);
   border: 1px solid var(--border);
   color: var(--text-muted);
@@ -1440,9 +1442,9 @@ button.share-btn {
     display: flex;
     flex-direction: column;
     gap: 5px;
-    width: 38px;
-    height: 38px;
-    padding: 0 10px;
+    width: 44px;
+    height: 44px;
+    padding: 0 12px;
     align-items: center;
     justify-content: center;
     border: 1px solid var(--border);
@@ -1481,6 +1483,33 @@ button.share-btn {
   .author-bio-avatar { width: 52px; height: 52px; }
 
   .page-hero { padding: 2.5rem 0 2rem; }
+
+  /* Ensure no horizontal scroll on mobile */
+  .content-container { max-width: 100%; }
+
+  /* Share bar wraps nicely on mobile */
+  .share-bar { row-gap: .5rem; }
+
+  /* Comment form fields full width */
+  .comment-form .comment-form-author,
+  .comment-form .comment-form-email { width: 100%; }
+}
+
+/* Phablets / large phones */
+@media (max-width: 600px) {
+  .share-btn {
+    width: 40px;
+    height: 40px;
+  }
+
+  .entry-content table {
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    max-width: 100%;
+  }
+
+  .single-meta { flex-direction: column; gap: .5rem; }
 }
 
 @media (max-width: 480px) {
@@ -1488,6 +1517,25 @@ button.share-btn {
   .content-container { padding-inline: 1rem; }
   .post-card-body { padding: 1.25rem; }
   .featured-post-overlay { padding: 1.5rem; }
+
+  .entry-title { font-size: clamp(1.5rem, 6vw, 2rem); }
+  .post-card-title { font-size: 1.0625rem; }
+
+  .share-bar { gap: .25rem; }
+}
+
+/* Ultra-small phones */
+@media (max-width: 360px) {
+  :root { --header-h: 56px; }
+
+  .container { padding-inline: .875rem; }
+  .content-container { padding-inline: .875rem; }
+
+  .entry-content { font-size: 1rem; }
+
+  .post-card-body { padding: 1rem; }
+
+  .footer-widgets { gap: 1.5rem; }
 }
 
 /* ---------------------------------------------------------------------------

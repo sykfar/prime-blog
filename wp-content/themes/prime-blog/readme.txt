@@ -1,10 +1,10 @@
 === Prime Blog ===
 Contributors: Alexander Sorge
-Tags: blog, custom-colors, custom-logo, custom-menu, editor-style, featured-images, responsive-layout, rtl-language-support
+Tags: blog, custom-colors, custom-logo, custom-menu, editor-style, featured-images, rtl-language-support
 Requires at least: 6.0
 Tested up to: 6.7
 Requires PHP: 8.0
-Stable tag: 1.0.2
+Stable tag: 1.0.3
 License: GNU General Public License v2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -30,6 +30,14 @@ Prime Blog is a lightweight, fully responsive WordPress theme built for content-
 4. Assign categories to posts — each category has a configurable colour
 
 == Changelog ==
+
+= 1.0.3 =
+* Accessibility: touch targets increased to 44×44px (WCAG 2.5.5) for dark-mode toggle, hamburger, pagination, and social icons
+* Responsive: table overflow-x scroll on mobile prevents horizontal page scroll
+* Responsive: overflow-wrap: break-word on article content prevents URL overflow
+* Responsive: new 600px breakpoint for phablets, 360px breakpoint for ultra-small phones
+* Responsive: fluid title sizing via clamp() on small screens
+* Responsive: share buttons enlarge to 40px on mobile for easier tapping
 
 = 1.0.2 =
 * Fix: move dark-mode inline script to wp_head hook (Theme Check compliance)
