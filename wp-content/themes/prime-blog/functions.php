@@ -5,7 +5,7 @@
 
 if ( ! defined( 'ABSPATH' ) ) exit;
 
-define( 'PRIME_BLOG_VERSION', '1.0.4' );
+define( 'PRIME_BLOG_VERSION', '1.0.5' );
 define( 'PRIME_BLOG_DIR', get_template_directory() );
 define( 'PRIME_BLOG_URI', get_template_directory_uri() );
 

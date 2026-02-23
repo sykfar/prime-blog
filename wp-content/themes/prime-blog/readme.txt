@@ -4,7 +4,7 @@ Tags: blog, custom-colors, custom-logo, custom-menu, editor-style, featured-imag
 Requires at least: 6.0
 Tested up to: 6.7
 Requires PHP: 8.0
-Stable tag: 1.0.4
+Stable tag: 1.0.5
 License: GNU General Public License v2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -30,6 +30,9 @@ Prime Blog is a lightweight, fully responsive WordPress theme built for content-
 4. Assign categories to posts — each category has a configurable colour
 
 == Changelog ==
+
+= 1.0.5 =
+* Version bump: consolidates all mobile responsiveness and responsive grid improvements from 1.0.3 and 1.0.4 as the stable release
 
 = 1.0.4 =
 * Fix: Customizer grid-columns CSS now scoped to @media (min-width: 1025px) – no longer overrides responsive breakpoints on mobile/tablet
