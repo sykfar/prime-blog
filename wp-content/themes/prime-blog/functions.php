@@ -5,7 +5,7 @@
 
 if ( ! defined( 'ABSPATH' ) ) exit;
 
-define( 'PRIME_BLOG_VERSION', '1.0.0' );
+define( 'PRIME_BLOG_VERSION', '1.0.2' );
 define( 'PRIME_BLOG_DIR', get_template_directory() );
 define( 'PRIME_BLOG_URI', get_template_directory_uri() );
 
@@ -242,6 +242,28 @@ function prime_blog_scripts() {
     }
 }
 add_action( 'wp_enqueue_scripts', 'prime_blog_scripts' );
+
+/**
+ * Output the dark-mode init script as the very first item in <head>
+ * (priority 0) so the correct colour scheme is applied before the browser
+ * renders anything, preventing a flash of unstyled content.
+ * Hooked via wp_head so child themes and plugins can unhook it.
+ */
+function prime_blog_dark_mode_script(): void {
+    ?>
+    <script>
+    (function(){
+        var t = localStorage.getItem('prime-blog-theme');
+        if (t) {
+            document.documentElement.setAttribute('data-theme', t);
+        } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.setAttribute('data-theme', 'dark');
+        }
+    })();
+    </script>
+    <?php
+}
+add_action( 'wp_head', 'prime_blog_dark_mode_script', 0 );
 
 /**
  * Load Google Fonts asynchronously so it never blocks rendering.

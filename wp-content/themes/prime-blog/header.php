@@ -4,8 +4,6 @@
   <meta charset="<?php bloginfo('charset'); ?>">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="profile" href="https://gmpg.org/xfn/11">
-  <!-- Inline: apply stored theme before first paint to prevent flash -->
-  <script>(function(){var t=localStorage.getItem('prime-blog-theme');if(t){document.documentElement.setAttribute('data-theme',t);}else if(window.matchMedia('(prefers-color-scheme: dark)').matches){document.documentElement.setAttribute('data-theme','dark');}})();</script>
   <?php wp_head(); ?>
 </head>
 
