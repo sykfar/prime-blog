@@ -5,7 +5,7 @@
 
 if ( ! defined( 'ABSPATH' ) ) exit;
 
-define( 'PRIME_BLOG_VERSION', '1.0.5' );
+define( 'PRIME_BLOG_VERSION', '1.0.6' );
 define( 'PRIME_BLOG_DIR', get_template_directory() );
 define( 'PRIME_BLOG_URI', get_template_directory_uri() );
 
@@ -1003,3 +1003,58 @@ class Prime_Blog_Walker_Nav extends Walker_Nav_Menu {
         $output .= '</li>';
     }
 }
+
+// ──────────────────────────────────────────────────────────────────────────
+//  BuddyPress Support
+// ──────────────────────────────────────────────────────────────────────────
+
+/**
+ * BuddyPress integration hooks.
+ * Fires on bp_include — guarantees BP is active.
+ */
+function prime_blog_buddypress_setup() {
+
+    // Register a widget area for BP pages
+    register_sidebar( [
+        'name'          => __( 'BuddyPress Sidebar', 'prime-blog' ),
+        'id'            => 'bp-sidebar',
+        'description'   => __( 'Widgets displayed on BuddyPress community pages.', 'prime-blog' ),
+        'before_widget' => '<section id="%1$s" class="widget %2$s">',
+        'after_widget'  => '</section>',
+        'before_title'  => '<h3 class="widget-title">',
+        'after_title'   => '</h3>',
+    ] );
+
+    // Enqueue BP style overrides after BP's own stylesheet
+    add_action( 'bp_enqueue_styles', 'prime_blog_bp_styles', 20 );
+}
+add_action( 'bp_include', 'prime_blog_buddypress_setup' );
+
+/**
+ * Enqueue the theme's BuddyPress stylesheet.
+ */
+function prime_blog_bp_styles() {
+    // Determine which BP stylesheet handle to depend on
+    $bp_css = wp_style_is( 'bp-legacy-css', 'registered' ) ? 'bp-legacy-css' : 'bp-nouveau';
+    wp_enqueue_style(
+        'prime-blog-buddypress',
+        PRIME_BLOG_URI . '/assets/css/buddypress.css',
+        wp_style_is( $bp_css, 'registered' ) ? [ $bp_css ] : [],
+        PRIME_BLOG_VERSION
+    );
+}
+
+/**
+ * Add body classes for BP page types.
+ */
+function prime_blog_bp_body_classes( $classes ) {
+    if ( ! function_exists( 'buddypress' ) ) {
+        return $classes;
+    }
+    if ( function_exists( 'bp_is_register_page' )
+        && ( bp_is_register_page() || bp_is_activation_page() ) ) {
+        $classes[] = 'bp-auth-page';
+    }
+    return $classes;
+}
+add_filter( 'body_class', 'prime_blog_bp_body_classes' );

@@ -2,7 +2,7 @@
 
 A clean, modern WordPress blog theme featuring DM Sans typography, configurable category colours, responsive post card grid, and dark/light mode support.
 
-**Version:** 1.0.5 | **License:** GPL v2 or later | **Requires WordPress:** 6.0+ | **Requires PHP:** 8.0+
+**Version:** 1.0.6 | **License:** GPL v2 or later | **Requires WordPress:** 6.0+ | **Requires PHP:** 8.0+
 
 ---
 
@@ -71,6 +71,9 @@ prime-blog/
 ---
 
 ## Changelog
+
+### 1.0.6
+- BuddyPress integration: dedicated `buddypress.php` wrapper template, `sidebar-buddypress.php`, "BuddyPress Sidebar" widget area, and `assets/css/buddypress.css` — full styling of member/group directories, activity stream, profiles, forms, and pagination using theme CSS variables; dark mode and mobile responsive
 
 ### 1.0.5
 - Version bump: stable release consolidating all mobile responsiveness and responsive grid improvements from 1.0.3 and 1.0.4

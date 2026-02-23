@@ -1,0 +1,263 @@
+/* =============================================================================
+   Prime Blog – BuddyPress Integration Styles
+   Uses theme CSS variables; loaded after BP's own stylesheet.
+   ============================================================================= */
+
+/* ---------------------------------------------------------------------------
+   Base / reset
+   --------------------------------------------------------------------------- */
+#buddypress {
+    font-family: var(--font);
+    color: var(--text);
+}
+
+#buddypress * {
+    box-sizing: border-box;
+}
+
+/* ---------------------------------------------------------------------------
+   Directory item list → CSS Grid of cards
+   --------------------------------------------------------------------------- */
+#buddypress ul.item-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1.5rem;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+#buddypress ul.item-list > li {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-sm);
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: .75rem;
+    transition: box-shadow .2s, transform .2s;
+}
+
+#buddypress ul.item-list > li:hover {
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+}
+
+/* ---------------------------------------------------------------------------
+   Avatars
+   --------------------------------------------------------------------------- */
+#buddypress .avatar,
+#buddypress img.avatar {
+    border-radius: 50%;
+    border: 2px solid var(--border);
+    object-fit: cover;
+}
+
+/* ---------------------------------------------------------------------------
+   Navigation tabs (directory filters + profile nav)
+   --------------------------------------------------------------------------- */
+#buddypress #subnav ul,
+#buddypress .item-list-tabs ul {
+    display: flex;
+    gap: .25rem;
+    list-style: none;
+    padding: 0;
+    margin: 0 0 1.5rem;
+    border-bottom: 1px solid var(--border);
+}
+
+#buddypress .item-list-tabs ul li a {
+    display: block;
+    padding: .625rem 1rem;
+    color: var(--text-muted);
+    font-weight: 500;
+    font-size: .9375rem;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    text-decoration: none;
+    transition: color .2s, border-color .2s;
+}
+
+#buddypress .item-list-tabs ul li.current a,
+#buddypress .item-list-tabs ul li a:hover {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+}
+
+/* ---------------------------------------------------------------------------
+   Buttons → theme .btn style
+   --------------------------------------------------------------------------- */
+#buddypress .generic-button a,
+#buddypress a.button,
+#buddypress button.button,
+#buddypress input[type="submit"],
+#buddypress button[type="submit"] {
+    display: inline-flex;
+    align-items: center;
+    gap: .5rem;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: var(--radius-sm);
+    padding: .5rem 1.25rem;
+    font-size: .9375rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity .2s, transform .15s;
+    text-decoration: none;
+}
+
+#buddypress .generic-button a:hover,
+#buddypress input[type="submit"]:hover,
+#buddypress button[type="submit"]:hover {
+    opacity: .88;
+    transform: translateY(-1px);
+}
+
+/* Secondary/outline buttons */
+#buddypress .friendship-button a,
+#buddypress .follow-button a {
+    background: transparent;
+    border: 1.5px solid var(--accent);
+    color: var(--accent);
+}
+
+/* ---------------------------------------------------------------------------
+   Form inputs
+   --------------------------------------------------------------------------- */
+#buddypress input[type="text"],
+#buddypress input[type="email"],
+#buddypress input[type="password"],
+#buddypress input[type="search"],
+#buddypress textarea,
+#buddypress select {
+    width: 100%;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--bg);
+    color: var(--text);
+    padding: .625rem .875rem;
+    font-size: 1rem;
+    transition: border-color .2s;
+}
+
+#buddypress input[type="text"]:focus,
+#buddypress input[type="email"]:focus,
+#buddypress input[type="password"]:focus,
+#buddypress input[type="search"]:focus,
+#buddypress textarea:focus,
+#buddypress select:focus {
+    border-color: var(--accent);
+    outline: none;
+}
+
+/* ---------------------------------------------------------------------------
+   Pagination
+   --------------------------------------------------------------------------- */
+#buddypress .pagination .pag-count {
+    color: var(--text-muted);
+    font-size: .875rem;
+}
+
+#buddypress .pagination-links a,
+#buddypress .pagination-links span {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 36px;
+    height: 36px;
+    padding: 0 .5rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--bg);
+    color: var(--text);
+    font-size: .9375rem;
+    text-decoration: none;
+    transition: background .2s, color .2s, border-color .2s;
+}
+
+#buddypress .pagination-links a:hover {
+    background: var(--bg-soft);
+    border-color: var(--accent);
+    color: var(--accent);
+}
+
+#buddypress .pagination-links .current {
+    background: var(--accent);
+    color: #fff;
+    border-color: var(--accent);
+}
+
+/* ---------------------------------------------------------------------------
+   Activity stream
+   --------------------------------------------------------------------------- */
+#buddypress #activity-stream .activity-item {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.25rem;
+    margin-bottom: 1rem;
+    box-shadow: var(--shadow-sm);
+}
+
+/* ---------------------------------------------------------------------------
+   Cover images
+   --------------------------------------------------------------------------- */
+#buddypress #header-cover-image {
+    height: 260px;
+    background-size: cover;
+    background-position: center;
+    border-radius: var(--radius);
+    margin-bottom: 1.5rem;
+}
+
+/* ---------------------------------------------------------------------------
+   Messages / notices
+   --------------------------------------------------------------------------- */
+#buddypress .bp-feedback,
+#buddypress .updated,
+#buddypress .error {
+    padding: .875rem 1.25rem;
+    border-radius: var(--radius-sm);
+    border-left: 4px solid var(--accent);
+    background: var(--bg-soft);
+    color: var(--text);
+    margin-bottom: 1.25rem;
+}
+
+#buddypress .error {
+    border-left-color: #dc2626;
+}
+
+/* ---------------------------------------------------------------------------
+   Registration / activation form narrowing
+   --------------------------------------------------------------------------- */
+body.bp-auth-page .bp-wrap .container {
+    max-width: 560px;
+}
+
+/* ---------------------------------------------------------------------------
+   Dark mode — CSS vars cascade automatically; only fix BP hardcoded colors
+   --------------------------------------------------------------------------- */
+[data-theme="dark"] #buddypress .avatar {
+    border-color: var(--border);
+}
+
+[data-theme="dark"] #buddypress ul.item-list > li {
+    background: var(--card-bg);
+    border-color: var(--border);
+}
+
+/* ---------------------------------------------------------------------------
+   Responsive
+   --------------------------------------------------------------------------- */
+@media (max-width: 600px) {
+    #buddypress ul.item-list {
+        grid-template-columns: 1fr;
+    }
+
+    #buddypress .item-list-tabs ul {
+        flex-wrap: wrap;
+    }
+}
