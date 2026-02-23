@@ -5,7 +5,7 @@
 
 if ( ! defined( 'ABSPATH' ) ) exit;
 
-define( 'PRIME_BLOG_VERSION', '1.0.3' );
+define( 'PRIME_BLOG_VERSION', '1.0.4' );
 define( 'PRIME_BLOG_DIR', get_template_directory() );
 define( 'PRIME_BLOG_URI', get_template_directory_uri() );
 
@@ -700,17 +700,32 @@ function prime_blog_customize_register( WP_Customize_Manager $wp_customize ): vo
         'priority' => 40,
     ] );
 
-    // Posts per row
+    // Posts per row – Desktop (> 1024 px)
     $wp_customize->add_setting( 'prime_grid_cols', [
         'default'           => '3',
         'sanitize_callback' => fn( $v ) => in_array( $v, [ '2', '3' ], true ) ? $v : '3',
         'transport'         => 'postMessage',
     ] );
     $wp_customize->add_control( 'prime_grid_cols', [
-        'label'   => __( 'Posts Per Row (desktop)', 'prime-blog' ),
-        'section' => 'prime_layout',
-        'type'    => 'select',
-        'choices' => [ '2' => __( '2 columns', 'prime-blog' ), '3' => __( '3 columns', 'prime-blog' ) ],
+        'label'       => __( 'Posts per row – Desktop', 'prime-blog' ),
+        'description' => __( 'Applies on screens wider than 1024 px.', 'prime-blog' ),
+        'section'     => 'prime_layout',
+        'type'        => 'select',
+        'choices'     => [ '2' => __( '2 columns', 'prime-blog' ), '3' => __( '3 columns', 'prime-blog' ) ],
+    ] );
+
+    // Posts per row – Tablet (601 – 1024 px)
+    $wp_customize->add_setting( 'prime_grid_cols_tablet', [
+        'default'           => '2',
+        'sanitize_callback' => fn( $v ) => in_array( $v, [ '1', '2' ], true ) ? $v : '2',
+        'transport'         => 'postMessage',
+    ] );
+    $wp_customize->add_control( 'prime_grid_cols_tablet', [
+        'label'       => __( 'Posts per row – Tablet', 'prime-blog' ),
+        'description' => __( 'Applies on screens 601–1024 px (iPad, landscape phone). Mobile always uses 1 column.', 'prime-blog' ),
+        'section'     => 'prime_layout',
+        'type'        => 'select',
+        'choices'     => [ '1' => __( '1 column', 'prime-blog' ), '2' => __( '2 columns', 'prime-blog' ) ],
     ] );
 
     // Card border radius
@@ -802,6 +817,7 @@ function prime_blog_customizer_css(): void {
     $card_radius       = max(  0, min( 28, (int) get_theme_mod( 'prime_card_radius',    10 ) ) );
     $container_width   = max( 960, min( 1600, (int) get_theme_mod( 'prime_container_width', 1200 ) ) );
     $grid_cols         = get_theme_mod( 'prime_grid_cols', '3' ) === '2' ? 2 : 3;
+    $grid_cols_tablet  = get_theme_mod( 'prime_grid_cols_tablet', '2' ) === '1' ? 1 : 2;
 
     // ── Category colors – dynamic: reads every category in the site ─────────
     $palette    = prime_blog_default_cat_colors();
@@ -847,7 +863,15 @@ function prime_blog_customizer_css(): void {
         --border:        <?php echo $dark_border; ?>;
     }
     body { font-size: <?php echo $base_font_size; ?>px; }
-    .posts-grid { grid-template-columns: repeat(<?php echo $grid_cols; ?>, 1fr); }
+    /* Grid columns – desktop only; mobile breakpoints in main.css are untouched */
+    @media (min-width: 1025px) {
+        .posts-grid { grid-template-columns: repeat(<?php echo $grid_cols; ?>, 1fr); }
+    }
+    /* Grid columns – tablet (601–1024 px) */
+    @media (max-width: 1024px) and (min-width: 601px) {
+        .posts-grid { grid-template-columns: repeat(<?php echo $grid_cols_tablet; ?>, 1fr); }
+    }
+    /* Mobile (≤ 600 px): always 1 column – handled by main.css */
 
     /* ── Share bar visibility ── */
     <?php if ( ! get_theme_mod( 'prime_share_enabled', '1' ) ) : ?>
