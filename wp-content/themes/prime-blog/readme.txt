@@ -4,7 +4,7 @@ Tags: blog, custom-colors, custom-logo, custom-menu, editor-style, featured-imag
 Requires at least: 6.0
 Tested up to: 6.7
 Requires PHP: 8.0
-Stable tag: 1.0.6
+Stable tag: 1.0.8
 License: GNU General Public License v2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -30,6 +30,13 @@ Prime Blog is a lightweight, fully responsive WordPress theme built for content-
 4. Assign categories to posts — each category has a configurable colour
 
 == Changelog ==
+
+= 1.0.8 =
+* Fix: replace deprecated wp_title() in buddypress.php with get_the_title( get_queried_object_id() ) — Theme Check compliance.
+* Remove: footer "Account / Community" column (column 4).
+
+= 1.0.7 =
+* BuddyBoss Platform integration: fix duplicate header on member/group pages, comprehensive CSS rewrite covering all BuddyBoss-specific classes (cover-image-header, bp-navs navigation, activity post form, skeleton loaders, moderation states, notification badges, directory search), improved stylesheet enqueueing for BuddyBoss handle detection, additional body classes for single-member and single-group pages.
 
 = 1.0.6 =
 * BuddyPress integration: dedicated wrapper template, custom sidebar widget area, full CSS styling of member/group directories, activity stream, profiles, forms, and pagination using theme design tokens (CSS variables); dark mode and mobile responsive.

@@ -1,8 +1,8 @@
 # Prime Blog
 
-A clean, modern WordPress blog theme featuring DM Sans typography, configurable category colours, responsive post card grid, and dark/light mode support.
+A clean, modern WordPress blog theme featuring DM Sans typography, configurable category colours, responsive post card grid, dark/light mode support, and full BuddyBoss Platform integration.
 
-**Version:** 1.0.6 | **License:** GPL v2 or later | **Requires WordPress:** 6.0+ | **Requires PHP:** 8.0+
+**Version:** 1.0.8 | **License:** GPL v2 or later | **Requires WordPress:** 6.0+ | **Requires PHP:** 8.0+
 
 ---
 
@@ -20,6 +20,7 @@ A clean, modern WordPress blog theme featuring DM Sans typography, configurable 
 - **Block editor support** — block styles, block patterns, and editor styles included
 - **Comments** — full `comments.php` with `wp_list_comments`, `comment_form`, and pagination
 - **Print styles** — hides navigation, sidebar, share bar, and related posts when printing
+- **BuddyBoss Platform** — theme-compat integration; styled member/group cover-image-header, directory card grids, activity stream, skeleton loaders, notification badges, moderation states, dark mode
 
 ---
 
@@ -29,6 +30,10 @@ A clean, modern WordPress blog theme featuring DM Sans typography, configurable 
 2. In WordPress go to **Appearance → Themes → Add New → Upload Theme**
 3. Upload the ZIP and click **Activate**
 4. Go to **Appearance → Customize → Prime Blog** to configure colours, typography, and layout
+
+### BuddyBoss Platform
+
+Works out of the box in theme-compat mode — no `add_theme_support('buddypress')` needed. The theme provides `buddypress.php` as the outer shell; BuddyBoss renders all inner HTML. Tested with BuddyBoss Platform and the bp-nouveau template pack.
 
 ---
 
@@ -51,26 +56,38 @@ A clean, modern WordPress blog theme featuring DM Sans typography, configurable 
 prime-blog/
 ├── assets/
 │   ├── css/
-│   │   ├── main.css          # All theme styles
-│   │   └── editor-style.css  # Block editor styles
+│   │   ├── main.css            # All theme styles
+│   │   ├── buddypress.css      # BuddyBoss Platform / BuddyPress styles
+│   │   └── editor-style.css    # Block editor styles
 │   └── js/
-│       ├── main.js           # Dark mode toggle, mobile nav, share bar
-│       └── customizer.js     # Live Customizer preview
+│       ├── main.js             # Dark mode toggle, mobile nav, share bar
+│       ├── customizer.js       # Live Customizer preview
+│       └── customizer-controls.js
+├── buddypress.php              # BuddyBoss / BuddyPress outer template
 ├── comments.php
 ├── footer.php
-├── functions.php             # Theme setup, Customizer, enqueues
+├── functions.php               # Theme setup, Customizer, enqueues
 ├── header.php
 ├── index.php
 ├── page.php
+├── readme.txt                  # WordPress.org readme
 ├── searchform.php
+├── sidebar.php
+├── sidebar-buddypress.php
 ├── single.php
-├── style.css                 # Theme header
-└── readme.txt                # WordPress.org readme
+└── style.css                   # Theme header
 ```
 
 ---
 
 ## Changelog
+
+### 1.0.8
+- Fix: replace deprecated `wp_title()` in `buddypress.php` with `get_the_title( get_queried_object_id() )` — Theme Check compliance
+- Remove: footer "Account / Community" column (column 4)
+
+### 1.0.7
+- BuddyBoss Platform integration: fix duplicate header on member/group pages, comprehensive CSS rewrite covering all BuddyBoss-specific classes (`cover-image-header`, `.bp-navs` navigation, activity post form, skeleton loaders, moderation states, notification badges, directory search), improved stylesheet enqueueing with BuddyBoss handle detection (`buddyboss-platform-css`), additional body classes `bp-single-member` and `bp-single-group` for targeted CSS
 
 ### 1.0.6
 - BuddyPress integration: dedicated `buddypress.php` wrapper template, `sidebar-buddypress.php`, "BuddyPress Sidebar" widget area, and `assets/css/buddypress.css` — full styling of member/group directories, activity stream, profiles, forms, and pagination using theme CSS variables; dark mode and mobile responsive

@@ -5,7 +5,7 @@
 
 if ( ! defined( 'ABSPATH' ) ) exit;
 
-define( 'PRIME_BLOG_VERSION', '1.0.6' );
+define( 'PRIME_BLOG_VERSION', '1.0.8' );
 define( 'PRIME_BLOG_DIR', get_template_directory() );
 define( 'PRIME_BLOG_URI', get_template_directory_uri() );
 
@@ -1031,25 +1031,40 @@ function prime_blog_buddypress_setup() {
 add_action( 'bp_include', 'prime_blog_buddypress_setup' );
 
 /**
- * Enqueue the theme's BuddyPress stylesheet.
+ * Enqueue the theme's BuddyBoss / BuddyPress stylesheet.
+ * BuddyBoss Platform registers its CSS under 'buddyboss-platform-css';
+ * fall back to 'bp-nouveau' then 'bp-legacy-css' for vanilla BP installs.
  */
 function prime_blog_bp_styles() {
-    // Determine which BP stylesheet handle to depend on
-    $bp_css = wp_style_is( 'bp-legacy-css', 'registered' ) ? 'bp-legacy-css' : 'bp-nouveau';
+    $handles = [ 'buddyboss-platform-css', 'bp-nouveau', 'bp-legacy-css' ];
+    $dep     = '';
+    foreach ( $handles as $h ) {
+        if ( wp_style_is( $h, 'registered' ) ) {
+            $dep = $h;
+            break;
+        }
+    }
     wp_enqueue_style(
         'prime-blog-buddypress',
         PRIME_BLOG_URI . '/assets/css/buddypress.css',
-        wp_style_is( $bp_css, 'registered' ) ? [ $bp_css ] : [],
+        $dep ? [ $dep ] : [],
         PRIME_BLOG_VERSION
     );
 }
 
 /**
- * Add body classes for BP page types.
+ * Add body classes for BP/BuddyBoss page types.
+ * Enables targeted CSS for single-member, single-group, and auth pages.
  */
 function prime_blog_bp_body_classes( $classes ) {
     if ( ! function_exists( 'buddypress' ) ) {
         return $classes;
+    }
+    if ( function_exists( 'bp_is_user' ) && bp_is_user() ) {
+        $classes[] = 'bp-single-member';
+    }
+    if ( function_exists( 'bp_is_group' ) && bp_is_group() ) {
+        $classes[] = 'bp-single-group';
     }
     if ( function_exists( 'bp_is_register_page' )
         && ( bp_is_register_page() || bp_is_activation_page() ) ) {
